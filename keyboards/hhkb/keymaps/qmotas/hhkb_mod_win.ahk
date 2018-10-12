@@ -1,4 +1,4 @@
-; 無変換/変換はUSキーボードだと認識されないため割り当て直す
+﻿; 無変換/変換はUSキーボードだと認識されないため割り当て直す
 sc07B::Send, {vk1Dsc07B}
 sc079::Send, {vk1Csc079}
 
@@ -14,3 +14,7 @@ sc079::Send, {vk1Csc079}
 ; 上部メニューがアクティブになるのを抑制
 *~LAlt::Send {Blind}{vk07}
 *~RAlt::Send {Blind}{vk07}
+
+;; アプリ用設定
+; SwitcherooのホットキーにCtrl + `が使えないので、Ctrl + Alt + `にマッピングしてこれを使う
+^SC029::Send, ^!{``}
