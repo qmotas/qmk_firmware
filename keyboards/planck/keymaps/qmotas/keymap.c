@@ -23,6 +23,13 @@ extern keymap_config_t keymap_config;
 
 enum planck_layers { _OSX_BASE, _WINDOWS, _LOWER, _LOWER_WIN, _RAISE, _RAISE_WIN, _SWITCH, _FUNCTION, _ADJUST };
 
+enum user_macro { UM_EMHL, UM_EMHL_WIN, UM_KHKR, UM_KHKR_WIN };
+
+#define M_EMHL MACROTAP(UM_EMHL)  // 「Lower」キー用のキーコード
+#define M_EMHL_WIN MACROTAP(UM_EMHL_WIN)
+#define M_KHKR MACROTAP(UM_KHKR)  // 「Raise」キー用のキーコード
+#define M_KHKR_WIN MACROTAP(UM_KHKR_WIN)
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* Default layer for mac OSX
@@ -41,7 +48,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ESC, KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC,
         LCMD_T(KC_TAB), KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
         KC_LSFT, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_ENT,
-        MO(_FUNCTION), KC_LGUI, KC_LCTL, LM(_SWITCH, MOD_LALT), LT(_LOWER, KC_LANG2), KC_SPC, KC_SPC, LT(_RAISE, KC_LANG1), KC_RALT, KC_LSFT, KC_RGUI, MO(_FUNCTION)),
+        MO(_FUNCTION), KC_LGUI, KC_LCTL, LM(_SWITCH, MOD_LALT), M_EMHL, KC_SPC, KC_SPC, M_KHKR, KC_RALT, KC_LSFT, KC_RGUI, MO(_FUNCTION)),
 
     /* Windows
      * ,-----------------------------------------------------------------------------------.
@@ -59,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         RCTL_T(KC_TAB), _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, LT(_LOWER_WIN, KC_MHEN), _______, _______, LT(_RAISE_WIN, KC_HENK), _______, _______, _______, _______),
+        _______, _______, _______, _______, M_EMHL_WIN, _______, _______, M_KHKR_WIN, _______, _______, _______, _______),
 
     /* Lower
      * ,-----------------------------------------------------------------------------------.
@@ -158,3 +165,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) {
+  switch (id) {
+    // タップで「英数」と「無変換」、ホールドで「Lower」
+    case UM_EMHL:
+      return MACRO_TAP_HOLD_LAYER(record, MACRO(T(LANG2), END), _LOWER);
+    case UM_EMHL_WIN:
+      return MACRO_TAP_HOLD_LAYER(record, MACRO(T(MHEN), END), _LOWER_WIN);
+    // タップで「かな」と「変換」、ホールドで「Raise」
+    case UM_KHKR:
+      return MACRO_TAP_HOLD_LAYER(record, MACRO(T(LANG1), END), _RAISE);
+    case UM_KHKR_WIN:
+      return MACRO_TAP_HOLD_LAYER(record, MACRO(T(HENK), END), _RAISE_WIN);
+  };
+  return MACRO_NONE;
+}
