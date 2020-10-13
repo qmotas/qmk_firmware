@@ -21,12 +21,14 @@
 
 extern keymap_config_t keymap_config;
 
-enum planck_layers { _OSX_BASE, _WINDOWS, _LOWER, _RAISE, _SWITCH, _FUNCTION, _ADJUST };
+enum planck_layers { _OSX_BASE, _WINDOWS, _LOWER, _LOWER_WIN, _RAISE, _RAISE_WIN, _SWITCH, _FUNCTION, _ADJUST };
 
-enum user_macro { UM_EMHL, UM_KHKR };
+enum user_macro { UM_EMHL, UM_EMHL_WIN, UM_KHKR, UM_KHKR_WIN };
 
 #define M_EMHL MACROTAP(UM_EMHL)  // 「Lower」キー用のキーコード
+#define M_EMHL_WIN MACROTAP(UM_EMHL_WIN)
 #define M_KHKR MACROTAP(UM_KHKR)  // 「Raise」キー用のキーコード
+#define M_KHKR_WIN MACROTAP(UM_KHKR_WIN)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -56,15 +58,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |------+------+------+------+------+------|------+------+------+------+------+------|
      * |      |      |      |      |      |      |      |      |      |      |      |      |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
-     * |      |      |      | ---  |      |             |      | ---  |      |      |      |
-     * |      |      |      |(MHEN)|      |             |      |(HENK)|      |      |      |
+     * |      |      |      |      | Lower|             | Raise|      |      |      |      |
+     * |      |      |      |      |(MHEN)|             |(HENK)|      |      |      |      |
      * `-----------------------------------------------------------------------------------'
      */
     [_WINDOWS] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         RCTL_T(KC_TAB), _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______),
+        _______, _______, _______, _______, M_EMHL_WIN, _______, M_KHKR_WIN, _______, _______, _______, _______),
 
     /* Lower
      * ,-----------------------------------------------------------------------------------.
@@ -74,14 +76,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |------+------+------+------+------+------|------+------+------+------+------+------|
      * |      |      |      |      |      |      |      |    1 |    2 |    3 |      |      |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
-     * |      |      |      |      |      |             |    0 |    . |    , |      |      |
+     * |      |      |      |      |      |   launcher  |    0 |    . |    , |      |      |
      * `-----------------------------------------------------------------------------------'
      */
     [_LOWER] = LAYOUT(
         _______, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS,
         _______, _______, _______, _______, _______, _______, _______, KC_4, KC_5, KC_6, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, KC_1, KC_2, KC_3, _______, _______,
-        _______, _______, _______, _______, _______, _______, KC_0, KC_DOT, KC_COMM, _______, _______),
+        _______, _______, _______, _______, _______, SCMD(KC_SPC), KC_0, KC_DOT, KC_COMM, _______, _______),
+    [_LOWER_WIN] = LAYOUT(
+        _______, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS,
+        _______, _______, _______, _______, _______, _______, _______, KC_4, KC_5, KC_6, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, KC_1, KC_2, KC_3, _______, _______,
+        _______, _______, _______, _______, _______, LCTL(LSFT(KC_SPC)), KC_0, KC_DOT, KC_COMM, _______, _______),
 
     /* Raise
      * ,-----------------------------------------------------------------------------------.
@@ -91,14 +98,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |------+------+------+------+------+------|------+------+------+------+------+------|
      * |      |      |      |      |      |      |      |   _  |   +  |   {  |   }  |      |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
-     * |      |      |      |      |      |             |      |      |      |      |      |
+     * |      |      |      |      |      |   switcher  |      |      |      |      |      |
      * `-----------------------------------------------------------------------------------'
      */
     [_RAISE] = LAYOUT(
         _______, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_GRV,
         _______, _______, _______, _______, _______, _______, _______, KC_MINS, KC_EQL, KC_LBRC, KC_RBRC, KC_BSLS,
         _______, _______, _______, _______, _______, _______, _______, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______),
+        _______, _______, _______, _______, _______, RALT(KC_SPC), _______, _______, _______, _______, _______),
+    [_RAISE_WIN] = LAYOUT(
+        _______, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_GRV,
+        _______, _______, _______, _______, _______, _______, _______, KC_MINS, KC_EQL, KC_LBRC, KC_RBRC, KC_BSLS,
+        _______, _______, _______, _______, _______, _______, _______, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, _______,
+        _______, _______, _______, _______, _______, RALT(KC_0), _______, _______, _______, _______, _______),
 
     /* Switch
      * ,-----------------------------------------------------------------------------------.
@@ -155,10 +167,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) {
   switch (id) {
-    case UM_EMHL:  // タップで「英数」と「無変換」、ホールドで「Lower」
-      return MACRO_TAP_HOLD_LAYER(record, MACRO(T(MHEN), T(LANG2), END), _LOWER);
-    case UM_KHKR:  // タップで「かな」と「変換」、ホールドで「Raise」
-      return MACRO_TAP_HOLD_LAYER(record, MACRO(T(HENK), T(LANG1), END), _RAISE);
+    // タップで「英数」と「無変換」、ホールドで「Lower」
+    case UM_EMHL:
+      return MACRO_TAP_HOLD_LAYER(record, MACRO(T(LANG2), END), _LOWER);
+    case UM_EMHL_WIN:
+      return MACRO_TAP_HOLD_LAYER(record, MACRO(T(MHEN), END), _LOWER_WIN);
+    // タップで「かな」と「変換」、ホールドで「Raise」
+    case UM_KHKR:
+      return MACRO_TAP_HOLD_LAYER(record, MACRO(T(LANG1), END), _RAISE);
+    case UM_KHKR_WIN:
+      return MACRO_TAP_HOLD_LAYER(record, MACRO(T(HENK), END), _RAISE_WIN);
   };
   return MACRO_NONE;
 }
